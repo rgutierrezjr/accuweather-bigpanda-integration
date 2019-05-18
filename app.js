@@ -16,7 +16,7 @@ const bigPandaAppKey = process.env.BIG_PANDA_APP_KEY
 const locations = new Map()
 
 // For demonstration purposes, this integration is implemented specifically for the locations below.
-// However, each integration piece ("getCurrentConditions" and "postNotification") is implemented generically to be reused
+// However, each integration piece ("getCurrentConditions" and "postNotification") is implemented generically and can be reused
 // with any location.
 
 locations.set('New York', [ "349727", "710949", "2531279", "2245721", "2212053"])
