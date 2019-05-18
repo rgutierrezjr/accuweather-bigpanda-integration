@@ -29,7 +29,7 @@ const postNotification = (bearerToken, body, callback) => {
         } else if (response.statusCode === 501) {
             callback('Error: Unsupported method');
         } else {
-            callback('Success: BigPanda notified.');
+            callback(undefined, 'Success: BigPanda notified.');
         }
     });
 };

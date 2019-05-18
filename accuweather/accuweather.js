@@ -20,10 +20,8 @@ const getCurrentConditions = (apiKey, locationId, callback) => {
         } else if (response.statusCode === 500) {
             callback('Error: Server encountered an unexpected condition which prevented it from fulfilling the request');
         } else if (response.statusCode === 503) {
-            callback('Error: Service unavailable.');
+            callback('Error: Service unavailable')
         } else if (response.statusCode === 200) {
-            console.log(body);
-
             callback(undefined, {
                 condition: body[0].WeatherText,
                 has_precipitation: body[0].HasPrecipitation,
@@ -31,7 +29,7 @@ const getCurrentConditions = (apiKey, locationId, callback) => {
                 temperature_fahrenheit: body[0].Temperature.Imperial.Value,
                 temperature_celsius: body[0].Temperature.Metric.Value,
                 link: body[0].Link
-            });
+            })
         } else {
             callback('Error: Unexpected error occurred');
         }

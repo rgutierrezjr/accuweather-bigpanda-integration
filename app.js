@@ -63,7 +63,7 @@ locations.forEach((locationIds, location) => {
                         console.log(errorMessage);
                     } else {
                         // Print success message to the console.
-                        // Alternatives: notify and external source or complete a queue item.
+                        // Alternatives: notify an external source or complete a queue item.
 
                         console.log(notificationResult);
                     }
