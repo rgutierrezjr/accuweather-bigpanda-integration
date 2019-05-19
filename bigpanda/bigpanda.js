@@ -1,7 +1,7 @@
 const request = require('request');
 
 // This function will post the given body to the BigPanda Alerts API.
-// The function is generic but could be refactored to accept any method and resource.
+// The function is generic but could be generalized further to accept any method and resource.
 const postNotification = (bearerToken, body, callback) => {
 
     request({

@@ -29,7 +29,7 @@ locations.set('San Francisco', [ "347629", "113032", "261737", "3409211", "26272
 
 locations.forEach((locationIds, location) => {
 
-    // Iterate through a locations (New York) location ids.
+    // Iterate through a location's (New York) location ids.
 
     locationIds.forEach((locationId) => {
 
