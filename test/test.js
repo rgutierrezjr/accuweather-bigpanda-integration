@@ -48,6 +48,7 @@ describe('AccuWeather: successful retrieval', () => {
 
 })
 
+// The following is a suite of predictable unsuccessful AccuWeather API requests.
 describe('AccuWeather: unsuccessful retrieval', () => {
 
     before(() => {
@@ -187,6 +188,103 @@ describe('BigPanda: unsuccessful notification', () => {
     it('401, unauthorized ', () => {
         return bigpanda.postNotification(bearerToken, JSON.stringify(alertPayload), (errorMessage, notificationResult) => {
             expect(errorMessage).to.equal('Error: Unauthorized. API authorization failed')
+        })
+    })
+
+})
+
+// The following is a suite of predictable unsuccessful Big Panda API notifications.
+describe('BigPanda: unsuccessful notification', () => {
+
+    before(() => {
+        nock('https://api.bigpanda.io')
+            .post('/data/v2/alerts')
+            .reply(400, bigpanda_response_pass);
+    })
+
+    it('401, Invalid payload or parameters. ', () => {
+        return bigpanda.postNotification(bearerToken, JSON.stringify(alertPayload), (errorMessage, notificationResult) => {
+            expect(errorMessage).to.equal('Error: Request had bad syntax or the parameters supplied were invalid')
+        })
+    })
+
+})
+
+describe('BigPanda: unsuccessful notification', () => {
+
+    before(() => {
+        nock('https://api.bigpanda.io')
+            .post('/data/v2/alerts')
+            .reply(404, bigpanda_response_pass);
+    })
+
+    it('400, Invalid route or resource ', () => {
+        return bigpanda.postNotification(bearerToken, JSON.stringify(alertPayload), (errorMessage, notificationResult) => {
+            expect(errorMessage).to.equal('Error: Server has not found a route matching the given URI')
+        })
+    })
+
+})
+
+describe('BigPanda: unsuccessful notification', () => {
+
+    before(() => {
+        nock('https://api.bigpanda.io')
+            .post('/data/v2/alerts')
+            .reply(410, bigpanda_response_pass);
+    })
+
+    it('410, Invalid resource', () => {
+        return bigpanda.postNotification(bearerToken, JSON.stringify(alertPayload), (errorMessage, notificationResult) => {
+            expect(errorMessage).to.equal('Error: Requested resource is no longer available')
+        })
+    })
+
+})
+
+describe('BigPanda: unsuccessful notification', () => {
+
+    before(() => {
+        nock('https://api.bigpanda.io')
+            .post('/data/v2/alerts')
+            .reply(500, bigpanda_response_pass);
+    })
+
+    it('500, Server-side error', () => {
+        return bigpanda.postNotification(bearerToken, JSON.stringify(alertPayload), (errorMessage, notificationResult) => {
+            expect(errorMessage).to.equal('Error: Server encountered an unexpected condition which prevented it from fulfilling the request')
+        })
+    })
+
+})
+
+describe('BigPanda: unsuccessful notification', () => {
+
+    before(() => {
+        nock('https://api.bigpanda.io')
+            .post('/data/v2/alerts')
+            .reply(501, bigpanda_response_pass);
+    })
+
+    it('501, Unsupported method', () => {
+        return bigpanda.postNotification(bearerToken, JSON.stringify(alertPayload), (errorMessage, notificationResult) => {
+            expect(errorMessage).to.equal('Error: Unsupported method')
+        })
+    })
+
+})
+
+describe('BigPanda: unsuccessful notification', () => {
+
+    before(() => {
+        nock('https://api.bigpanda.io')
+            .post('/data/v2/alerts')
+            .replyWithError('Some unexpected error.');
+    })
+
+    it('Unexpected error', () => {
+        return bigpanda.postNotification(bearerToken, JSON.stringify(alertPayload), (errorMessage, notificationResult) => {
+            expect(errorMessage).to.equal('Error: Unable to connect to BigPanda API')
         })
     })
 

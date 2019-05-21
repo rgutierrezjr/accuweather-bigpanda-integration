@@ -54,20 +54,24 @@ locations.forEach((locationIds, location) => {
                     link: weatherResults.Link
                 }
 
-                // Send alert to BigPanda API.
-                bigpanda.postNotification(bigPandaBearerToken, JSON.stringify(alertPayload), (errorMessage, notificationResult) => {
-                    if (errorMessage) {
-                        // If an error is detected, print the details to console.
-                        // Alternatives: write to a file, notify an external source, or add to a queue for reattempt.
+                try {
+                    // Send alert to BigPanda API.
+                    bigpanda.postNotification(bigPandaBearerToken, alertPayload, (errorMessage, notificationResult) => {
+                        if (errorMessage) {
+                            // If an error is detected, print the details to console.
+                            // Alternatives: write to a file, notify an external source, or add to a queue for reattempt.
 
-                        console.log(errorMessage);
-                    } else {
-                        // Print success message to the console.
-                        // Alternatives: notify an external source or complete a queue item.
+                            console.log(errorMessage);
+                        } else {
+                            // Print success message to the console.
+                            // Alternatives: notify an external source or complete a queue item.
 
-                        console.log(notificationResult);
-                    }
-                })
+                            console.log(notificationResult);
+                        }
+                    })
+                } catch(e) {
+                    console.log(e)
+                }
             }
         })
     })
