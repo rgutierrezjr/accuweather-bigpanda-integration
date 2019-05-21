@@ -22,16 +22,7 @@ const getCurrentConditions = (apiKey, locationId, callback) => {
         } else if (response.statusCode === 503) {
             callback('Error: Service unavailable')
         } else if (response.statusCode === 200) {
-            callback(undefined, {
-                condition: body[0].WeatherText,
-                has_precipitation: body[0].HasPrecipitation,
-                precipitation_type: body[0].PrecipitationType,
-                temperature_fahrenheit: body[0].Temperature.Imperial.Value,
-                temperature_celsius: body[0].Temperature.Metric.Value,
-                link: body[0].Link
-            })
-        } else {
-            callback('Error: Unexpected error occurred');
+            callback(undefined, body[0])
         }
     });
 };

@@ -47,11 +47,11 @@ locations.forEach((locationIds, location) => {
                     status : `warning`,
                     host: `${location}`,
                     check: 'Weather Check',
-                    incident_identifier: `${locationId}`,
-                    condition: weatherResults.condition,
-                    precipitation: weatherResults.has_precipitation,
-                    precipitation_type: weatherResults.precipitation_type,
-                    link: weatherResults.link
+                    incident_identifier: `${locationId}_6`,
+                    condition: weatherResults.WeatherText,
+                    precipitation: weatherResults.HasPrecipitation,
+                    precipitation_type: weatherResults.PrecipitationType,
+                    link: weatherResults.Link
                 }
 
                 // Send alert to BigPanda API.

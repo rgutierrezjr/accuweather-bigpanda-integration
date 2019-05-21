@@ -28,7 +28,7 @@ const postNotification = (bearerToken, body, callback) => {
             callback('Error: Server encountered an unexpected condition which prevented it from fulfilling the request');
         } else if (response.statusCode === 501) {
             callback('Error: Unsupported method');
-        } else {
+        } else if(response.statusCode === 201) {
             callback(undefined, 'Success: BigPanda notified.');
         }
     });
