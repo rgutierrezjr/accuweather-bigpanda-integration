@@ -8,6 +8,7 @@ const accuWeatherApiKey = process.env.ACCU_WEATHER_API_KEY
 const bigPandaBearerToken = process.env.BIG_PANDA_BEARER_TOKEN
 const bigPandaAppKey = process.env.BIG_PANDA_APP_KEY
 
+// This function will orchestrate the integration between AccuWeather and BigPanda.
 const integrate = (location, locationId, callback) => {
 
     accuweather.getCurrentConditions(accuWeatherApiKey, locationId, (errorMessage, weatherResults) => {

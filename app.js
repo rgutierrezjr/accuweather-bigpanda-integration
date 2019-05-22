@@ -1,10 +1,7 @@
 const integration = require('./integration/integrate')
 
-// This file will orchestrate the integration between AccuWeather and BigPanda.
-// Using the pre-configured locations below, the application will request current real-time
+// Using the pre-configured locations below, this application will request current real-time
 // weather conditions and then notify BigPanda of said conditions to form correlation between them.
-
-
 
 const locations = new Map()
 
