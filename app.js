@@ -29,7 +29,7 @@ locations.forEach((locationIds, location) => {
 
         // Invoke integration.
 
-        integration.integrate(location, locationId, (error, message) => {
+        integration.integrate(location, locationId, (error, result) => {
             if (error) {
                 // Failed to integrate.
                 // Alternatives: write to a file, notify an external source, or mark queue item as failed for reattempt.
@@ -39,7 +39,7 @@ locations.forEach((locationIds, location) => {
                 // Successfully retrieve current conditions and notify big panda.
                 // Alternatives: write to a file, notify an external source, or complete queue item.
 
-                console.log(message)
+                console.log(result)
             }
         })
 
