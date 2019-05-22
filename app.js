@@ -1,23 +1,20 @@
+const integration = require('./integration/integrate')
 
 // This file will orchestrate the integration between AccuWeather and BigPanda.
 // Using the pre-configured locations below, the application will request current real-time
 // weather conditions and then notify BigPanda of said conditions to form correlation between them.
 
-require('./config/config')
 
-const bigpanda = require('./bigpanda/bigpanda')
-const accuweather = require('./accuweather/accuweather')
-
-// Dynamically load keys and tokens.
-const accuWeatherApiKey = process.env.ACCU_WEATHER_API_KEY
-const bigPandaBearerToken = process.env.BIG_PANDA_BEARER_TOKEN
-const bigPandaAppKey = process.env.BIG_PANDA_APP_KEY
 
 const locations = new Map()
 
 // For demonstration purposes, this integration is implemented specifically for the locations below.
 // However, each integration piece ("getCurrentConditions" and "postNotification") is implemented generically and can be reused
 // with any location.
+
+// I could see this reading in locations from a file, a database, from the command line, or from an external
+// source (incoming api calls) and pushed into a queue. The following would instead read/pop from said queue and process
+// locations accordingly. Those making it end-to-end would be marked as complete and the rest as failed to guarantee delivery.
 
 locations.set('New York', [ "349727", "710949", "2531279", "2245721", "2212053"])
 locations.set('Chicago', [ "348308", "2249562", "1162619", "1169367", "1068089"])
@@ -33,51 +30,25 @@ locations.forEach((locationIds, location) => {
 
     locationIds.forEach((locationId) => {
 
-        accuweather.getCurrentConditions(accuWeatherApiKey, locationId, (errorMessage, weatherResults) => {
-            if (errorMessage) {
-                // If an error is detected, print the details to console.
-                // Alternatives: write to a file, notify an external source, or add to a queue for reattempt.
+        // Invoke integration.
 
-                console.log(errorMessage)
+        integration.integrate(location, locationId, (error, message) => {
+            if (!error) {
+                // Failed to integrate.
+                // Alternatives: write to a file, notify an external source, or mark queue item as failed for reattempt.
+
+                console.log(message)
             } else {
+                // Successfully retrieve current conditions and notify big panda.
+                // Alternatives: write to a file, notify an external source, or complete queue item.
 
-                // Build BigPanda payload with results from AccuWeather response.
-                const alertPayload = {
-                    app_key : `${bigPandaAppKey}`,
-                    status : `warning`,
-                    host: `${location}`,
-                    check: 'Weather Check',
-                    incident_identifier: `${locationId}_6`,
-                    condition: weatherResults.WeatherText,
-                    precipitation: weatherResults.HasPrecipitation,
-                    precipitation_type: weatherResults.PrecipitationType,
-                    link: weatherResults.Link
-                }
-
-                try {
-                    // Send alert to BigPanda API.
-                    bigpanda.postNotification(bigPandaBearerToken, alertPayload, (errorMessage, notificationResult) => {
-                        if (errorMessage) {
-                            // If an error is detected, print the details to console.
-                            // Alternatives: write to a file, notify an external source, or add to a queue for reattempt.
-
-                            console.log(errorMessage);
-                        } else {
-                            // Print success message to the console.
-                            // Alternatives: notify an external source or complete a queue item.
-
-                            console.log(notificationResult);
-                        }
-                    })
-                } catch(e) {
-                    console.log(e)
-                }
+                console.log(message)
             }
         })
+
     })
+
 })
-
-
 
 
 

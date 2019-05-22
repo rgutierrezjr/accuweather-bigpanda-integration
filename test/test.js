@@ -3,6 +3,7 @@ const nock = require('nock')
 
 const bigpanda = require('../bigpanda/bigpanda')
 const accuweather = require('../accuweather/accuweather')
+const integration = require('../integration/integrate')
 
 const accuweather_response_pass = require('./accuweather-response-pass')
 const bigpanda_response_pass = require('./bigpanda-response-pass')
