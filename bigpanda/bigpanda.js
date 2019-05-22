@@ -14,22 +14,32 @@ const postNotification = (bearerToken, body, callback) => {
         }
     }, (error, response) => {
 
-        if (error) {
-            callback('Error: Unable to connect to BigPanda API');
-        } else if (response.statusCode === 400) {
-            callback('Error: Request had bad syntax or the parameters supplied were invalid');
-        } else if (response.statusCode === 401) {
-            callback('Error: Unauthorized. API authorization failed');
-        } else if (response.statusCode === 404) {
-            callback('Error: Server has not found a route matching the given URI');
-        } else if (response.statusCode === 410) {
-            callback('Error: Requested resource is no longer available');
-        } else if (response.statusCode === 500) {
-            callback('Error: Server encountered an unexpected condition which prevented it from fulfilling the request');
-        } else if (response.statusCode === 501) {
-            callback('Error: Unsupported method');
-        } else if(response.statusCode === 201) {
-            callback(undefined, 'Success: BigPanda notified.');
+        if (error || response === undefined) {
+            return callback('Error: Unable to connect to BigPanda API')
+        }
+
+        switch (response.statusCode) {
+            case 400:
+                return callback('Error: Request had bad syntax or the parameters supplied were invalid')
+                break
+            case 401:
+                return callback('Error: Unauthorized. API authorization failed')
+                break
+            case 404:
+                return callback('Error: Server has not found a route matching the given URI')
+                break
+            case 410:
+                return callback('Error: Requested resource is no longer available')
+                break
+            case 500:
+                return callback('Error: Server encountered an unexpected condition which prevented it from fulfilling the request')
+                break
+            case 501:
+                return callback('Error: Unsupported method')
+                break
+            case 201:
+                return callback(undefined, 'Success: BigPanda notified.')
+                break
         }
     });
 };

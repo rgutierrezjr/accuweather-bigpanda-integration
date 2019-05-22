@@ -24,7 +24,7 @@ const integrate = (location, locationId, callback) => {
                 status : `warning`,
                 host: `${location}`,
                 check: 'Weather Check',
-                incident_identifier: `${locationId}_6`,
+                incident_identifier: `${locationId}`,
                 condition: weatherResults.WeatherText,
                 precipitation: weatherResults.HasPrecipitation,
                 precipitation_type: weatherResults.PrecipitationType,
