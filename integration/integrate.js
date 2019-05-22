@@ -16,7 +16,7 @@ const integrate = (location, locationId, callback) => {
             // If an error is detected, return error.
             // Alternatives: write to a file, notify an external source, or add to a queue for reattempt.
 
-            callback(errorMessage)
+            return callback(errorMessage)
         } else {
 
             // Build BigPanda payload with results from AccuWeather response.
@@ -25,7 +25,7 @@ const integrate = (location, locationId, callback) => {
                 status : `warning`,
                 host: `${location}`,
                 check: 'Weather Check',
-                incident_identifier: `${locationId}`,
+                incident_identifier: `${locationId}_9`,
                 condition: weatherResults.WeatherText,
                 precipitation: weatherResults.HasPrecipitation,
                 precipitation_type: weatherResults.PrecipitationType,
@@ -37,12 +37,12 @@ const integrate = (location, locationId, callback) => {
                 if (errorMessage) {
                     // If an error is detected, return error.
 
-                    callback(errorMessage)
+                    return callback(errorMessage)
                 } else {
                     // Print success message to the console.
                     // Alternatives: notify an external source or complete a queue item.
 
-                    callback(undefined, notificationResult)
+                    return callback(undefined, notificationResult)
                 }
             })
         }

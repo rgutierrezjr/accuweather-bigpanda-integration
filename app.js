@@ -10,8 +10,8 @@ const locations = new Map()
 // with any location.
 
 // I could see this reading in locations from a file, a database, from the command line, or from an external
-// source (incoming api calls) and pushed into a queue. The following would instead read/pop from said queue and process
-// locations accordingly. Those making it end-to-end would be marked as complete and the rest as failed to guarantee delivery.
+// source (incoming api calls) and pushed into a queue. The following would instead read/pop from said source and process
+// locations accordingly. Those making it end-to-end would could be marked as complete and the rest as failed to guarantee delivery.
 
 locations.set('New York', [ "349727", "710949", "2531279", "2245721", "2212053"])
 locations.set('Chicago', [ "348308", "2249562", "1162619", "1169367", "1068089"])
@@ -30,11 +30,11 @@ locations.forEach((locationIds, location) => {
         // Invoke integration.
 
         integration.integrate(location, locationId, (error, message) => {
-            if (!error) {
+            if (error) {
                 // Failed to integrate.
                 // Alternatives: write to a file, notify an external source, or mark queue item as failed for reattempt.
 
-                console.log(message)
+                console.log(error)
             } else {
                 // Successfully retrieve current conditions and notify big panda.
                 // Alternatives: write to a file, notify an external source, or complete queue item.
@@ -46,10 +46,3 @@ locations.forEach((locationIds, location) => {
     })
 
 })
-
-
-
-
-
-
-
