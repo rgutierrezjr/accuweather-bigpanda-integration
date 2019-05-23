@@ -2,9 +2,9 @@
   "name": "accuweather-bigpanda-integration",
   "version": "1.0.0",
   "description": "This application serves as an integration between the AccuWeather and BigPanda APIs.",
-  "main": "app.js",
+  "main": "src/app.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "node src/app.js",
     "test": "mocha"
   },
   "author": "Ruben Gutierrez, ruben@bigboston.io",

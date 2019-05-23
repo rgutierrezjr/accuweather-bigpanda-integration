@@ -1,7 +1,6 @@
 // This config file will assist in dynamically setting development environment key-value pairs.
 // This gives us the flexibility to easily test the application without modifying key function calls.
 
-// If NODE_ENV is not set, we will default to "development".
 const env = process.env.NODE_ENV || 'development';
 
 // If the environment is defined as "development", read in dev variables from our configuration file.
