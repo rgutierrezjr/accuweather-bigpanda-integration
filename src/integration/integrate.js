@@ -17,35 +17,34 @@ const integrate = (location, locationId, callback) => {
             // Alternatives: write to a file, notify an external source, or add to a queue for reattempt.
 
             return callback(errorMessage)
-        } else {
+        }
 
-            // Build BigPanda payload with results from AccuWeather response.
-            const alertPayload = {
-                app_key : `${bigPandaAppKey}`,
-                status : `warning`,
-                host: `${location}`,
-                check: 'Weather Check',
-                incident_identifier: `${locationId}_9`,
-                condition: weatherResults.WeatherText,
-                precipitation: weatherResults.HasPrecipitation,
-                precipitation_type: weatherResults.PrecipitationType,
-                link: weatherResults.Link
+        // Build BigPanda payload with results from AccuWeather response.
+        const alertPayload = {
+            app_key : `${bigPandaAppKey}`,
+            status : `warning`,
+            host: `${location}`,
+            check: 'Weather Check',
+            incident_identifier: `${locationId}_9`,
+            condition: weatherResults.WeatherText,
+            precipitation: weatherResults.HasPrecipitation,
+            precipitation_type: weatherResults.PrecipitationType,
+            link: weatherResults.Link
+        }
+
+        // Send alert to BigPanda API.
+        bigpanda.postNotification(bigPandaBearerToken, alertPayload, (errorMessage, notificationResult) => {
+            if (errorMessage) {
+                // If an error is detected, return error.
+
+                return callback(errorMessage)
             }
 
-            // Send alert to BigPanda API.
-            bigpanda.postNotification(bigPandaBearerToken, alertPayload, (errorMessage, notificationResult) => {
-                if (errorMessage) {
-                    // If an error is detected, return error.
+            // Print success message to the console.
+            // Alternatives: notify an external source or complete a queue item.
 
-                    return callback(errorMessage)
-                } else {
-                    // Print success message to the console.
-                    // Alternatives: notify an external source or complete a queue item.
-
-                    return callback(undefined, notificationResult)
-                }
-            })
-        }
+            return callback(undefined, notificationResult)
+        })
     })
 }
 
