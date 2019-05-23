@@ -28,8 +28,36 @@ describe('BigPanda', () => {
         })
 
         it('Best case, successful request', () => {
-            return bigpanda.postNotification(bearerToken, JSON.stringify(alertPayload), (errorMessage, notificationResult) => {
+            return bigpanda.postNotification(bearerToken, alertPayload, (errorMessage, notificationResult) => {
                 expect(notificationResult).to.equal('Success: BigPanda notified.')
+            })
+        })
+    })
+
+    describe('Invalid bearer token', () => {
+        it('Empty bearer token ', () => {
+            return bigpanda.postNotification("", alertPayload, (errorMessage, notificationResult) => {
+                expect(errorMessage).to.equal('Error: Bearer token required')
+            })
+        })
+
+        it('Undefined bearer token ', () => {
+            return bigpanda.postNotification(undefined, alertPayload, (errorMessage, notificationResult) => {
+                expect(errorMessage).to.equal('Error: Bearer token required')
+            })
+        })
+    })
+
+    describe('Invalid body', () => {
+        it('Empty body', () => {
+            return bigpanda.postNotification(bearerToken, "", (errorMessage, notificationResult) => {
+                expect(errorMessage).to.equal('Error: Body is required')
+            })
+        })
+
+        it('Undefined body ', () => {
+            return bigpanda.postNotification(bearerToken, undefined, (errorMessage, notificationResult) => {
+                expect(errorMessage).to.equal('Error: Body is required')
             })
         })
     })
@@ -43,7 +71,7 @@ describe('BigPanda', () => {
         })
 
         it('401, unauthorized ', () => {
-            return bigpanda.postNotification(bearerToken, JSON.stringify(alertPayload), (errorMessage, notificationResult) => {
+            return bigpanda.postNotification(bearerToken, alertPayload, (errorMessage, notificationResult) => {
                 expect(errorMessage).to.equal('Error: Unauthorized. API authorization failed')
             })
         })
@@ -59,7 +87,7 @@ describe('BigPanda', () => {
         })
 
         it('401, Invalid payload or parameters. ', () => {
-            return bigpanda.postNotification(bearerToken, JSON.stringify(alertPayload), (errorMessage, notificationResult) => {
+            return bigpanda.postNotification(bearerToken, alertPayload, (errorMessage, notificationResult) => {
                 expect(errorMessage).to.equal('Error: Request had bad syntax or the parameters supplied were invalid')
             })
         })
@@ -75,7 +103,7 @@ describe('BigPanda', () => {
         })
 
         it('400, Invalid route or resource ', () => {
-            return bigpanda.postNotification(bearerToken, JSON.stringify(alertPayload), (errorMessage, notificationResult) => {
+            return bigpanda.postNotification(bearerToken, alertPayload, (errorMessage, notificationResult) => {
                 expect(errorMessage).to.equal('Error: Server has not found a route matching the given URI')
             })
         })
@@ -91,7 +119,7 @@ describe('BigPanda', () => {
         })
 
         it('410, Invalid resource', () => {
-            return bigpanda.postNotification(bearerToken, JSON.stringify(alertPayload), (errorMessage, notificationResult) => {
+            return bigpanda.postNotification(bearerToken, alertPayload, (errorMessage, notificationResult) => {
                 expect(errorMessage).to.equal('Error: Requested resource is no longer available')
             })
         })
@@ -107,7 +135,7 @@ describe('BigPanda', () => {
         })
 
         it('500, Server-side error', () => {
-            return bigpanda.postNotification(bearerToken, JSON.stringify(alertPayload), (errorMessage, notificationResult) => {
+            return bigpanda.postNotification(bearerToken, alertPayload, (errorMessage, notificationResult) => {
                 expect(errorMessage).to.equal('Error: Server encountered an unexpected condition which prevented it from fulfilling the request')
             })
         })
@@ -123,7 +151,7 @@ describe('BigPanda', () => {
         })
 
         it('501, Unsupported method', () => {
-            return bigpanda.postNotification(bearerToken, JSON.stringify(alertPayload), (errorMessage, notificationResult) => {
+            return bigpanda.postNotification(bearerToken, alertPayload, (errorMessage, notificationResult) => {
                 expect(errorMessage).to.equal('Error: Unsupported method')
             })
         })
@@ -139,7 +167,7 @@ describe('BigPanda', () => {
         })
 
         it('Unexpected error', () => {
-            return bigpanda.postNotification(bearerToken, JSON.stringify(alertPayload), (errorMessage, notificationResult) => {
+            return bigpanda.postNotification(bearerToken, alertPayload, (errorMessage, notificationResult) => {
                 expect(errorMessage).to.equal('Error: Unable to connect to BigPanda API')
             })
         })

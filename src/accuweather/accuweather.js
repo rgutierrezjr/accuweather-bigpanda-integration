@@ -2,6 +2,15 @@ const request = require('request');
 
 // Invoke the AccuWeather API. Returns the current weather conditions for the location id passed in.
 const getCurrentConditions = (apiKey, locationId, callback) => {
+
+    if (!apiKey || apiKey === '') {
+        return callback('Error: API Key is required')
+    }
+
+    if (!locationId || locationId === '') {
+        return callback('Error: Location id is required')
+    }
+
     request({
         method: 'GET',
         url: `http://dataservice.accuweather.com/currentconditions/v1/${locationId}?apikey=${apiKey}`,

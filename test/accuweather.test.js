@@ -38,6 +38,34 @@ describe('AccuWeather', () => {
 
     })
 
+    describe('Invalid api key', () => {
+        it('Empty bearer token', () => {
+            return accuweather.getCurrentConditions("", locationId, (errorMessage, weatherResults) => {
+                expect(errorMessage).to.equal('Error: API Key is required')
+            })
+        })
+
+        it('Undefined bearer token', () => {
+            return accuweather.getCurrentConditions("", undefined, (errorMessage, weatherResults) => {
+                expect(errorMessage).to.equal('Error: API Key is required')
+            })
+        })
+    })
+
+    describe('Invalid location id', () => {
+        it('Empty location id ', () => {
+            return accuweather.getCurrentConditions(apiKey, "", (errorMessage, weatherResults) => {
+                expect(errorMessage).to.equal('Error: Location id is required')
+            })
+        })
+
+        it('Undefined location id', () => {
+            return accuweather.getCurrentConditions(apiKey, undefined, (errorMessage, weatherResults) => {
+                expect(errorMessage).to.equal('Error: Location id is required')
+            })
+        })
+    })
+
     describe('unsuccessful retrieval', () => {
 
         before(() => {

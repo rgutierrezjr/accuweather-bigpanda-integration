@@ -33,7 +33,7 @@ const integrate = (location, locationId, callback) => {
             }
 
             // Send alert to BigPanda API.
-            bigpanda.postNotification(bigPandaBearerToken, JSON.stringify(alertPayload), (errorMessage, notificationResult) => {
+            bigpanda.postNotification(bigPandaBearerToken, alertPayload, (errorMessage, notificationResult) => {
                 if (errorMessage) {
                     // If an error is detected, return error.
 

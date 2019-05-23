@@ -4,8 +4,16 @@ const request = require('request');
 // The function is generic but could be generalized further to accept any method and resource.
 const postNotification = (bearerToken, body, callback) => {
 
+    if (!bearerToken || bearerToken === '') {
+        return callback('Error: Bearer token required')
+    }
+
+    if (!body || body === '') {
+        return callback('Error: Body is required')
+    }
+
     request({
-        body: body,
+        body: JSON.stringify(body),
         method: 'POST',
         url: `https://api.bigpanda.io/data/v2/alerts`,
         headers: {
