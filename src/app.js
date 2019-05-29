@@ -1,7 +1,7 @@
 const integration = require('./integration/integrate')
 
 // Using the pre-configured locations below, this application will request current real-time
-// weather conditions and then notify BigPanda of said conditions to form correlation between them.
+// weather conditions and then notify BigPanda (a data enrichment and correlation platform) of said conditions to form correlation between them.
 
 const locations = new Map()
 
