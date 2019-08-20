@@ -1,5 +1,5 @@
 module.exports = {
-    "response": {
-        "status": "success"
-    }
-}
+  response: {
+    status: 'success',
+  },
+};

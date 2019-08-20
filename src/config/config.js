@@ -5,14 +5,14 @@ const env = process.env.NODE_ENV || 'development';
 
 // If the environment is defined as "development", read in dev variables from our configuration file.
 if (env === 'development') {
-    // Load dev key-value pairs from our config file into our process environment.
+  // Load dev key-value pairs from our config file into our process environment.
 
-    const config = require('./config.json');
-    const envConfig = config[env];
+  const config = require('./config.json');
+  const envConfig = config[env];
 
-    Object.keys(envConfig).forEach((key) => {
-        process.env[key] = envConfig[key];
-    });
+  Object.keys(envConfig).forEach((key) => {
+    process.env[key] = envConfig[key];
+  });
 }
 
 // Production environment variables will be set in the production environment.
