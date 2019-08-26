@@ -35,6 +35,10 @@ locations.set('San Francisco', ['347629', '113032', '261737', '3409211', '262723
 // in one application.
 queue.listenAndNotify(notifyQueue, deadLetterQueue);
 
+// Assignment Bonus: start a consumer for the dead letter queue. We can start the listener
+// just like the notification queue except with "deadLetterQueue" as the primary queue.
+// queue.listenAndNotify(deadLetterQueue, deadLetterQueue);
+
 locations.forEach((locationIds, location) => {
   // Iterate through a location's (New York) location ids.
 
