@@ -28,10 +28,10 @@ locations.set('San Francisco', ['347629', '113032', '261737', '3409211', '262723
 // An alternative method would be to fetch all weather conditions up front and then
 // build a single notification payload; this is supported by BigPanda.
 
-// Start RabbitMQ queue listener. This listener will consume queue items as they're pushed
+// Start RabbitMQ consumer. This consumer will listen for queue items as they're pushed
 // by "fetchWeatherAndQueue". One important aspect to note here is that, ideally, we would
-// have a consumer application listening indefinitely for new notifications to send. However,
-// for the purposes of this demonstration I've included both the producer and consumer code
+// have a standalone consumer application whose job would be to listen and notify BigPanda. However,
+// for the purposes of this demonstration I've included both the producer and consumer
 // in one application.
 queue.listenAndNotify(notifyQueue, deadLetterQueue);
 
