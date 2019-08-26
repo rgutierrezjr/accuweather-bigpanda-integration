@@ -1,4 +1,9 @@
 const integration = require('./integration/integrate');
+const queue = require('./rabbitmq/dequeueAndNotify');
+
+// RabbitMQ Queues
+const deadLetterQueue = 'dead_letter_queue';
+const notifyQueue = 'notify_big_panda_queue';
 
 // Using the pre-configured locations below, this application will request current real-time
 // weather conditions and then notify BigPanda (a data enrichment and correlation platform) of said conditions to form
@@ -23,23 +28,24 @@ locations.set('San Francisco', ['347629', '113032', '261737', '3409211', '262723
 // An alternative method would be to fetch all weather conditions up front and then
 // build a single notification payload; this is supported by BigPanda.
 
+// Start RabbitMQ queue listener. This listener will consume queue items as they're pushed
+// by "fetchWeatherAndQueue". One important aspect to note here is that, ideally, we would
+// have a consumer application listening indefinitely for new notifications to send. However,
+// for the purposes of this demonstration I've included both the producer and consumer code
+// in one application.
+queue.listenAndNotify(notifyQueue, deadLetterQueue);
+
 locations.forEach((locationIds, location) => {
   // Iterate through a location's (New York) location ids.
 
   locationIds.forEach((locationId) => {
-    // Invoke integration.
+    // Fetch weather conditions for location and push to queue.
 
-    integration.integrate(location, locationId, (error, result) => {
+    integration.fetchWeatherAndQueue(location, locationId, (error, result) => {
       if (error) {
-        // Failed to integrate.
-        // Alternatives: write to a file, notify an external source, or mark queue item as failed for reattempt.
-
-        console.log(error);
+        console.log('unsuccessful fetch and queue:', error);
       } else {
-        // Successfully retrieve current conditions and notify big panda.
-        // Alternatives: write to a file, notify an external source, or complete queue item.
-
-        console.log(result);
+        console.log('successful fetch and queue', result);
       }
     });
   });

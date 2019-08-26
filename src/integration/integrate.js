@@ -1,15 +1,16 @@
 require('../config/config');
 
-const bigpanda = require('../bigpanda/bigpanda');
 const accuweather = require('../accuweather/accuweather');
+const notificationQueue = require('../rabbitmq/queueNotification');
 
 // Dynamically load keys and tokens.
 const accuWeatherApiKey = process.env.ACCU_WEATHER_API_KEY;
-const bigPandaBearerToken = process.env.BIG_PANDA_BEARER_TOKEN;
 const bigPandaAppKey = process.env.BIG_PANDA_APP_KEY;
 
+const notifyQueue = 'notify_big_panda_queue';
+
 // This function will orchestrate the integration between AccuWeather and BigPanda.
-const integrate = (location, locationId, callback) => {
+const fetchWeatherAndQueue = (location, locationId, callback) => {
   accuweather.getCurrentConditions(accuWeatherApiKey, locationId, (errorMessage, weatherResults) => {
     if (errorMessage) {
       // If an error is detected, return error.
@@ -18,33 +19,37 @@ const integrate = (location, locationId, callback) => {
       return callback(errorMessage);
     }
 
-    // Build BigPanda payload with results from AccuWeather response.
+    // Build a BigPanda payload with results from AccuWeather response. We will queue this
+    // payload and notify BigPanda at a later time.
     const alertPayload = {
       app_key: `${bigPandaAppKey}`,
       status: 'warning',
       host: `${location}`,
       check: 'Weather Check',
-      incident_identifier: `${locationId}_12`,
+      incident_identifier: `${locationId}_${Math.floor(Math.random() * 101)}`,
       condition: weatherResults.WeatherText,
       precipitation: weatherResults.HasPrecipitation,
       precipitation_type: weatherResults.PrecipitationType,
       link: weatherResults.Link,
     };
 
-    // Send alert to BigPanda API.
-    bigpanda.postNotification(bigPandaBearerToken, alertPayload, (errorMessage, notificationResult) => {
-      if (errorMessage) {
-        // If an error is detected, return error.
+    // Define options for this channel. Set queue behavior and header values.
+    // RabbitMQ by default does not have built in retry functionality so I will
+    // be implementing this behavior myself using a "reattempts remaining" header field.
+    // If we fail to notify BigPanda for whatever reason, we will redeliver this item
+    // with decremented "reattempts remaining".
+    const options = {
+      persistent: true,
+      contentType: 'application/json',
+      type: 'big_panda_notification',
+      headers: {
+        reattempts_remaining: 5,
+      },
+    };
 
-        return callback(errorMessage);
-      }
-
-      // Print success message to the console.
-      // Alternatives: notify an external source or complete a queue item.
-
-      return callback(undefined, notificationResult);
-    });
+    // Queue payload for notification.
+    return notificationQueue.push(alertPayload, notifyQueue, options);
   });
 };
 
-module.exports.integrate = integrate;
+module.exports.fetchWeatherAndQueue = fetchWeatherAndQueue;
